@@ -57,7 +57,7 @@ const CompanyForm = () => {
   return (<>
 
 {!predict && <form onSubmit={handleSubmit}>
- <h2>Please provide the following...</h2>
+ <h2>Please provide the following details</h2>
       <label>
         Founded At:
         <input
