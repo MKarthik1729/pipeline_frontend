@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios'
+import './App.css'
 const CompanyForm = () => {
+  const [predict,setPredict] = useState(null)
   const [formData, setFormData] = useState({
     founded_at: '',
     closed_at: '',
@@ -43,8 +45,8 @@ const CompanyForm = () => {
 
     try {
       const response = await axios.post('https://pipeline-backend-1.onrender.com/predict', formData);
-      alert(`${response.data}`);
-      // Do something with the response if needed
+      setPredict(response.data)
+            // Do something with the response if needed
     } catch (error) {
       console.error('Error posting data:', error);
       // Handle error
@@ -52,25 +54,16 @@ const CompanyForm = () => {
     // Add your logic to send data to the backend here
   };
 
-  return (
-    <form onSubmit={handleSubmit}>
-      <h2>Please provide the following...</h2>
+  return (<>
+
+{!predict && <form onSubmit={handleSubmit}>
+ <h2>Please provide the following...</h2>
       <label>
         Founded At:
         <input
           type="date"
           name="founded_at"
           value={formData.founded_at}
-          onChange={handleChange}
-        />
-      </label>
-      <label>
-        Closed At:
-        <input
-          type="date"
-          name="closed_at"
-          value={formData.closed_at}
-          min={formData.founded_at} // Set min attribute to ensure closed_at is always greater than founded_at
           onChange={handleChange}
         />
       </label>
@@ -104,7 +97,15 @@ const CompanyForm = () => {
         </select>
       </label>
       <button type="submit">Submit</button>
-    </form>
+    </form>}
+    {predict && 
+    <div className='App-header'>
+      <p>The prediction to the following data is as follows</p>
+      <h2>{predict}</h2>
+      <button onClick={()=>setPredict(null)}>back</button>
+    </div>
+    }
+    </>
   );
 };
 
